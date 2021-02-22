@@ -34,9 +34,24 @@ def to_usd(my_price):
 
     Returns: $4,000.44
     """
-    return f"${my_price:,.2f}" #> $12,000.71
+   # return f"${my_price:,.2f}" #> $12,000.71
 
 
 # TODO: write some Python code here to produce the desired output
 
 print(products)
+
+
+# INFO CAPTURE INPUT
+
+selected_id = input("Please input a product identifier: ")
+print(selected_id)
+print(type(selected_id))
+
+
+
+
+# INFO DISPLAY / OUTPUT
+
+
+
