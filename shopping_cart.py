@@ -44,6 +44,8 @@ def to_usd(my_price):
 
 # INFO CAPTURE INPUT
 
+from datetime import datetime
+
 total_price = 0
 selected_ids = []
 
@@ -58,16 +60,35 @@ while True:
         #print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
         selected_ids.append(selected_id)
 
-#print(selected_ids)
 
+#Grocery store name
+print("-----------------")
+print("Oliva's Market:")
+print("508-473-7920")
+print("www.olivasmarket.com")
+print("-----------------")
+now = datetime.now()
+print("Checkout At: " + now.strftime("%Y-%m-%d %H:%M:%S"))
+print("-----------------")
+
+
+#print(selected_ids)
 for selected_id in selected_ids:
         matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
         matching_product = matching_products[0]
         total_price = total_price + matching_product["price"]
-        print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
+        print("... " + matching_product["name"] + " " + str(matching_product["price"]))
 
 
 # INFO DISPLAY / OUTPUT
+print("-----------------")
+tax = round(total_price * .0875,2)
+final_price = round(tax + total_price,2)
 
-print("TOTAL PRICE : " + str(total_price)) #format as USD
+print("SUBTOTAL: " + str(total_price))
+print("TAX: " + str(tax))
+print("TOTAL PRICE : " + str(final_price)) #format as USD after
 
+
+print("-----------------")
+print("THANK YOU FOR YOUR BUSINESS! SEE YOU AGAIN SOON!")
