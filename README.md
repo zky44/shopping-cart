@@ -32,9 +32,11 @@ pip install -r requirements.txt
 
 > NOTE: if this command throws you an error, make sure you are running it from the repository's root directory where the requirements.txt file exists. Refer back to the initial `cd` step above
 
-## Email Receipt Setup
+## Updating Your Inventory Prior to Use
 
+In the "Products" list on the shopping_cart.py file, you can add, remove, or change the name, department, aisle, or price of different grocery items.  
 
+## Email Receipt Setup (Optional)
 
 If you want to receive an email with a receipt of your purchases, you will have to set up a secret file to store your email and API code. In the root directory of your local respository, create a new file called ".env", and update the contents of the file to specify your desired email and API code (directions above). An example line of code is shown below:
 
@@ -45,9 +47,12 @@ PLAYER_NAME ="Tom Brady"
 
 >IMPORTANT: the ".env" file is usally the place for passing configuration options and secret credentials, so as a best practrice we don't upload this file to version control. Make sure that you add the code in this [.gitignore](/.gitignore) file, most importantly line 2, to your ".gitignore" file.
 
-## Usage
+## Using the Shopping Cart Software
 
-To play, run the game script using the code below!:
+To use the software, run the code below in your command line editor:
 
 ```py
-python game.py
+python shopping_cart.py
+
+Then, insert each product you bought according to its product "id" number in the products list of the shopping_cart.py file.
+When you are finished, type the text "DONE." You will see your receipt. If you set up receiving email receipts in the step above, you will also receive a digital copy of your receipt in your chosen email inbox.
