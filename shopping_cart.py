@@ -51,7 +51,7 @@ selected_ids = []
 
 while True:
     selected_id = input("Please input a product identifier: ")
-    if selected_id == 50: #Change 50 to "DONE" but without getting an error. I think the issue is that selected_id reads as an int not a str
+    if selected_id == "DONE": #Change 50 to "DONE" but without getting an error. I think the issue is that selected_id reads as an int not a str
         break
     else:
         #matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
@@ -103,19 +103,38 @@ from sendgrid.helpers.mail import Mail
 load_dotenv()
 
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
+SENDGRID_TEMPLATE_ID = os.getenv("SENDGRID_TEMPLATE_ID", default="OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
 SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+
+# this must match the test data structure
+template_data = {
+    "total_price_usd": "$14.95",
+    "human_friendly_timestamp": "June 1st, 2019 10:00 AM",
+    "products":[
+        {"id":1, "name": "Product 1"},
+        {"id":2, "name": "Product 2"},
+        {"id":3, "name": "Product 3"},
+        {"id":2, "name": "Product 2"},
+        {"id":1, "name": "Product 1"}
+    ]
+} # or construct this dictionary dynamically based on the results of some other process :-D
 
 client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
 print("CLIENT:", type(client))
 
-subject = "Your Receipt from the Green Grocery Store"
+message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS)
+message.template_id = SENDGRID_TEMPLATE_ID
+message.dynamic_template_data = template_data
+print("MESSAGE:", type(message))
 
-html_content = "Hello World"
-print("HTML:", html_content)
+#subject = "Your Receipt from Oliva's Market"
+
+#html_content = "Hello World"
+#print("HTML:", html_content)
 
 # FYI: we'll need to use our verified SENDER_ADDRESS as the `from_email` param
 # ... but we can customize the `to_emails` param to send to other addresses
-message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS, subject=subject, html_content=html_content)
+#message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS, subject=subject, html_content=html_content)
 
 try:
     response = client.send(message)
