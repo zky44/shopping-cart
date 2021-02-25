@@ -1,5 +1,10 @@
 # shopping_cart.py
 
+import datetime
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
@@ -34,7 +39,7 @@ def to_usd(my_price):
 
     Returns: $4,000.44
     """
-   # return f"${my_price:,.2f}" #> $12,000.71
+    return f"${my_price:,.2f}" #> $12,000.71
 
 
 # TODO: write some Python code here to produce the desired output
@@ -43,8 +48,6 @@ def to_usd(my_price):
 
 
 # INFO CAPTURE INPUT
-
-from datetime import datetime
 
 total_price = 0
 selected_ids = []
@@ -67,8 +70,11 @@ print("Oliva's Market:")
 print("508-473-7920")
 print("www.olivasmarket.com")
 print("-----------------")
-now = datetime.now()
-print("Checkout At: " + now.strftime("%Y-%m-%d %H:%M:%S"))
+#now = datetime.now()
+date = datetime.date.today()
+time = datetime.datetime.now()
+print("Checkout at: ", date, time.strftime("%I:%M:%S %p")) #new code
+#print("Checkout At: " + now.strftime("%Y-%m-%d %H:%M:%S"))
 print("-----------------")
 
 
@@ -82,12 +88,13 @@ for selected_id in selected_ids:
 
 # INFO DISPLAY / OUTPUT
 print("-----------------")
-tax = round(total_price * .0875,2)
-final_price = round(tax + total_price,2)
+tax_rate = os.getenv("TAX_RATE", default ="0.0875")
+tax = (total_price * float(tax_rate))
+final_price = tax + total_price
 
-print("SUBTOTAL: " + str(total_price))
-print("TAX: " + str(tax))
-print("TOTAL PRICE : " + str(final_price)) #format as USD after
+print("SUBTOTAL: " + str(to_usd(total_price)))
+print("TAX: " + str(to_usd(tax)))
+print("TOTAL PRICE : " + str(to_usd(final_price)))
 
 
 print("-----------------")
@@ -108,15 +115,9 @@ SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var c
 
 # this must match the test data structure
 template_data = {
-    "total_price_usd": "$14.95",
-    "human_friendly_timestamp": "June 1st, 2019 10:00 AM",
-    "products":[
-        {"id":1, "name": "Product 1"},
-        {"id":2, "name": "Product 2"},
-        {"id":3, "name": "Product 3"},
-        {"id":2, "name": "Product 2"},
-        {"id":1, "name": "Product 1"}
-    ]
+    "total_price_usd": str(to_usd(final_price)),
+    "human_friendly_timestamp": (time.strftime("%I:%M:%S %p")),
+    "products":[selected_ids]
 } # or construct this dictionary dynamically based on the results of some other process :-D
 
 client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
