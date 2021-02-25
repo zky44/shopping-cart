@@ -1,4 +1,4 @@
-# shopping_cart.py
+# import important packages
 
 import datetime
 import os
@@ -7,7 +7,7 @@ load_dotenv()
 
 
 
-
+#products list (to be changed by any end-user who wishes)
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
@@ -31,7 +31,7 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
-
+#define the conversion to currency
 def to_usd(my_price):
     """
     Converts a numeric value to usd-formatted string, for printing and display purposes.
@@ -42,12 +42,7 @@ def to_usd(my_price):
 
     Returns: $4,000.44
     """
-    return f"${my_price:,.2f}" #> $12,000.71
-
-
-# TODO: write some Python code here to produce the desired output
-
-#print(products)
+    return f"${my_price:,.2f}" 
 
 
 # INFO CAPTURE INPUT
@@ -57,13 +52,10 @@ selected_ids = []
 
 while True:
     selected_id = input("Please input a product identifier: ")
-    if selected_id == "DONE": #Change 50 to "DONE" but without getting an error. I think the issue is that selected_id reads as an int not a str
+    if selected_id == "DONE": 
         break
     else:
-        #matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
-        #matching_product = matching_products[0]
-        #total_price = total_price + matching_product["price"]
-        #print("SELECTED PRODUCT: " + matching_product["name"] + " " + str(matching_product["price"]))
+
         selected_ids.append(selected_id)
 
 
@@ -73,15 +65,11 @@ print("Oliva's Market:")
 print("508-473-7920")
 print("www.olivasmarket.com")
 print("-----------------")
-#now = datetime.now()
 date = datetime.date.today()
 time = datetime.datetime.now()
-print("Checkout at: ", date, time.strftime("%I:%M:%S %p")) #new code
-#print("Checkout At: " + now.strftime("%Y-%m-%d %H:%M:%S"))
+print("Checkout at: ", date, time.strftime("%I:%M:%S %p")) #I collaborated with Matt Coyne to discover this human-friendly code
 print("-----------------")
 
-
-#print(selected_ids)
 product_list = []
 for selected_id in selected_ids:
         matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
@@ -93,7 +81,7 @@ for selected_id in selected_ids:
 
 # INFO DISPLAY / OUTPUT
 print("-----------------")
-tax_rate = os.getenv("TAX_RATE", default ="0.0875")
+tax_rate = os.getenv("TAX_RATE", default ="0.0875") # "Configuring Sales Tax Rate" Bonus Challenge
 tax = (total_price * float(tax_rate))
 final_price = tax + total_price
 
@@ -106,15 +94,13 @@ print("-----------------")
 print("THANK YOU FOR YOUR BUSINESS! SEE YOU AGAIN SOON!")
 
 
-
+#import more important packages, including sendgrid
 import os
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from datetime import datetime
 now = datetime.now()
-
-
 load_dotenv()
 
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
@@ -126,24 +112,15 @@ template_data = {
     "total_price_usd": str(to_usd(final_price)),
     "human_friendly_timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
     "products":[product_list]
-} # or construct this dictionary dynamically based on the results of some other process :-D
+} # This is where I struggled to establish a product_list that was dynamic. I tried using append with a product_list in line 73 that was added to in each 'for loop' on line 79.
 
-client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
+client = SendGridAPIClient(SENDGRID_API_KEY)
 print("CLIENT:", type(client))
 
 message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS)
 message.template_id = SENDGRID_TEMPLATE_ID
 message.dynamic_template_data = template_data
 print("MESSAGE:", type(message))
-
-#subject = "Your Receipt from Oliva's Market"
-
-#html_content = "Hello World"
-#print("HTML:", html_content)
-
-# FYI: we'll need to use our verified SENDER_ADDRESS as the `from_email` param
-# ... but we can customize the `to_emails` param to send to other addresses
-#message = Mail(from_email=SENDER_ADDRESS, to_emails=SENDER_ADDRESS, subject=subject, html_content=html_content)
 
 try:
     response = client.send(message)
