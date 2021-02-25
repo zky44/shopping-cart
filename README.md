@@ -38,11 +38,11 @@ In the "Products" list on the shopping_cart.py file, you can add, remove, or cha
 
 ## Email Receipt Setup (Optional)
 
-If you want to receive an email with a receipt of your purchases, you will have to set up a secret file to store your email and API code. In the root directory of your local respository, create a new file called ".env", and update the contents of the file to specify your desired email and API code (directions above). An example line of code is shown below:
+If you want to receive an email with a receipt of your purchases, you will have to set up a secret file to store your email and API key. In the root directory of your local respository, create a new file called ".env", and update the contents of the file to specify your desired email and API key (directions above). An example line of code is shown below:
 
 ```sh
 
-PLAYER_NAME ="Tom Brady"
+SENDER_ADDRESS = "abc@gmail.com"
 ```
 
 >IMPORTANT: the ".env" file is usally the place for passing configuration options and secret credentials, so as a best practrice we don't upload this file to version control. Make sure that you add the code in this [.gitignore](/.gitignore) file, most importantly line 2, to your ".gitignore" file.

@@ -5,6 +5,9 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+
+
+
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
@@ -79,11 +82,13 @@ print("-----------------")
 
 
 #print(selected_ids)
+product_list = []
 for selected_id in selected_ids:
         matching_products = [p for p in products if str(p["id"]) == str(selected_id)]
         matching_product = matching_products[0]
         total_price = total_price + matching_product["price"]
         print("... " + matching_product["name"] + " " + str(matching_product["price"]))
+        product_list.append(selected_id)
 
 
 # INFO DISPLAY / OUTPUT
@@ -106,6 +111,9 @@ import os
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
+from datetime import datetime
+now = datetime.now()
+
 
 load_dotenv()
 
@@ -116,8 +124,8 @@ SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var c
 # this must match the test data structure
 template_data = {
     "total_price_usd": str(to_usd(final_price)),
-    "human_friendly_timestamp": (time.strftime("%I:%M:%S %p")),
-    "products":[selected_ids]
+    "human_friendly_timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
+    "products":[product_list]
 } # or construct this dictionary dynamically based on the results of some other process :-D
 
 client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
